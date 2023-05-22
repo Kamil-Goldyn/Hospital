@@ -1,6 +1,4 @@
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Patient implements Authorizator{
     private final String firstName;
@@ -10,15 +8,17 @@ public class Patient implements Authorizator{
     private final int age;
     private int hospitalizationPeriod;
     private Diseases disease;
-    private final Random random = new Random();
-    private static List<Patient> patients = new LinkedList<>();
+    private static final List<Patient> patients = new LinkedList<>();
 
-    private Patient(String firstName, String lastName, int age) {
+    private Patient(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
         this.id = patientId;
+        Random random = new Random();
         int number = random.nextInt((4));
+        int lowerBound = 18;
+        int upperBound = 90;
+        this.age = random.nextInt(upperBound-lowerBound + 1) + lowerBound;
 
         switch (number) {
             case 0 -> this.disease = Diseases.HEADACHE;
@@ -35,13 +35,14 @@ public class Patient implements Authorizator{
         patientId++;
     }
 
-    public static Patient addNewPatient(String firstName, String lastName, int age) {
-        Patient patient = new Patient(firstName, lastName, age);
+    public static Patient addNewPatient(String firstName, String lastName) {
+        Patient patient = new Patient(firstName, lastName);
         patients.add(patient);
         return patient;
     }
 
     public static List<Patient> getPatients() {
+        patients.removeIf(p -> p.getHospitalizationPeriod() == 0);
         return patients;
     }
 
@@ -85,9 +86,7 @@ public class Patient implements Authorizator{
 
     @Override
     public String toString() {
-        return "Patient: " +
-                "" + firstName + " " +
-                "" + lastName +
+        return "Patient: " + firstName + " " + lastName +
                 ", patient ID: " + id +
                 ", age: " + age +
                 ", number of weeks to spend in hospital yet: " + hospitalizationPeriod +

@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class HospitalManager {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalStateException {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -13,16 +13,16 @@ public class HospitalManager {
 
         List<Patient> patients = Patient.getPatients();
 
-        Patient.addNewPatient("Janusz","Kowalski",40);
-        Patient.addNewPatient("Mariusz","Nowak",40);
-        Patient.addNewPatient("Kamil","Wisniewski",40);
-        Patient.addNewPatient("Maciej","Kowalczyk",40);
-        Patient.addNewPatient("Mateusz","Lewandowski",40);
-        Patient.addNewPatient("Dawid","Mazur",40);
-        Patient.addNewPatient("Ewa","Kwiatkowska",40);
-        Patient.addNewPatient("Anna","Krawczyk",40);
-        Patient.addNewPatient("Julia","Kaczmarek",40);
-        Patient.addNewPatient("Halina","Piotrowska",40);
+        Patient.addNewPatient("Janusz","Kowalski");
+        Patient.addNewPatient("Mariusz","Nowak");
+        Patient.addNewPatient("Kamil","Wisniewski");
+        Patient.addNewPatient("Maciej","Kowalczyk");
+        Patient.addNewPatient("Mateusz","Lewandowski");
+        Patient.addNewPatient("Dawid","Mazur");
+        Patient.addNewPatient("Ewa","Kwiatkowska");
+        Patient.addNewPatient("Anna","Krawczyk");
+        Patient.addNewPatient("Julia","Kaczmarek");
+        Patient.addNewPatient("Halina","Piotrowska");
 
         for (Patient p : patients) {
             System.out.println(p);
@@ -66,24 +66,28 @@ public class HospitalManager {
                     showMenu();
                     choice = scanner.nextInt();
                 }
+                case 4 -> {
+                    choice = 0;
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + choice);
             }
         }
     }
 
     public static void curePatient(Patient patient) {
+        List<Patient> patients = Patient.getPatients();
         if (patient.isCurable()) {
-            List<Patient> patients = Patient.getPatients();
             patients.remove(patient);
         } else {
-            System.out.println("You can not do that! You have to wait for the rest of hospitalization time (go home to advance time by one day)");
+            System.out.println("You can not do that!");
         }
     }
     public static void showMenu() {
-        System.out.println("What would you like to do now?" +
-                "\n1. Try to cure your patients" +
-                "\n2. Check current patient status" +
-                "\n3. Check all your patients status " +
-                "\n4. Go home (advances time by 1 day) " +
-                "\n5. Exit application");
+        System.out.println("""
+                What would you like to do now?
+                1. Try to cure your patients
+                2. Check current patient status
+                3. Check all your patients status\s
+                4. Exit application""");
     }
 }
